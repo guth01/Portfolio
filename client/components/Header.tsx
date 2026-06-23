@@ -50,7 +50,7 @@ export function Header({ introComplete = true }: HeaderProps) {
           <span className="text-sm font-bold text-white">Gautham</span>
         </Link>
 
-        <div className="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 sm:gap-x-8">
+        <div className="hide-scrollbar flex items-center gap-x-5 overflow-x-auto sm:gap-x-8">
           {navLink("home", "home")}
           {navLink("projects", "works")}
           {navLink("about-me", "about-me")}
@@ -59,13 +59,6 @@ export function Header({ introComplete = true }: HeaderProps) {
           {navLink("certifications", "certifications")}
           {navLink("skills", "skills")}
           {navLink("contacts", "contacts")}
-
-          <div className="hidden items-center gap-1 sm:flex">
-            <span className="text-sm font-semibold text-portfolio-gray">EN</span>
-            <svg width="10" height="5" viewBox="0 0 10 5" fill="none" className="text-portfolio-gray">
-              <path d="M0 0L5 5L10 0" stroke="currentColor" strokeWidth="0.5" />
-            </svg>
-          </div>
         </div>
       </nav>
     </header>

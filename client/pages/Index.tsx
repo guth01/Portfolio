@@ -2,8 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ContactForm } from "@/components/ContactForm";
-import { DotsPattern } from "@/components/DotsPattern";
-import { LogoOutline } from "@/components/Logo";
 import { IntroTransition } from "@/components/IntroTransition";
 import { RotatingTypewriter } from "@/components/RotatingTypewriter";
 import {
@@ -19,6 +17,7 @@ import {
   Wrench,
   Briefcase,
   ExternalLink,
+  Globe,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -38,6 +37,7 @@ const projects = [
     ],
     gradient: "bg-gradient-to-br from-indigo-700/90 via-portfolio-primary/80 to-violet-950/90",
     repo: "https://github.com/guth01/cortex-ai",
+    live: "https://study-partner-agent.vercel.app/login",
   },
   {
     id: "taskforge",
@@ -53,6 +53,7 @@ const projects = [
     ],
     gradient: "bg-gradient-to-br from-emerald-700/90 via-teal-800/80 to-slate-900/90",
     repo: "https://github.com/guth01/TaskForge",
+    live: "https://collabdocs-zqn1.onrender.com/login",
   },
   {
     id: "eventsorg-mcp",
@@ -310,22 +311,35 @@ export default function Index() {
               className="relative flex min-h-[320px] justify-center lg:min-h-[420px]"
             >
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative w-full max-w-md overflow-hidden border-2 border-portfolio-primary/30 shadow-[0_0_60px_rgba(199,120,221,0.15)]">
-                  <motion.img
-                    src="/pic1.jpeg"
-                    alt="Gautham Praveen"
-                    className="h-full w-full object-cover"
-                    whileHover={{ scale: 1.04 }}
-                    transition={{ duration: 0.5 }}
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-portfolio-bg/80 via-transparent to-transparent" />
+                {/* Animated glow ring behind image */}
+                <motion.div
+                  className="absolute h-[105%] w-[105%] rounded-sm bg-gradient-to-br from-portfolio-primary/30 via-violet-600/20 to-fuchsia-500/30 blur-2xl"
+                  animate={{ opacity: [0.4, 0.7, 0.4], scale: [0.98, 1.02, 0.98] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                />
+
+                {/* Corner brackets container */}
+                <div className="relative w-full max-w-md">
+                  {/* Top-left bracket */}
+                  <span className="pointer-events-none absolute -left-3 -top-3 h-6 w-6 border-l-2 border-t-2 border-portfolio-primary/50" />
+                  {/* Top-right bracket */}
+                  <span className="pointer-events-none absolute -right-3 -top-3 h-6 w-6 border-r-2 border-t-2 border-portfolio-primary/50" />
+                  {/* Bottom-left bracket */}
+                  <span className="pointer-events-none absolute -bottom-3 -left-3 h-6 w-6 border-b-2 border-l-2 border-portfolio-primary/50" />
+                  {/* Bottom-right bracket */}
+                  <span className="pointer-events-none absolute -bottom-3 -right-3 h-6 w-6 border-b-2 border-r-2 border-portfolio-primary/50" />
+
+                  <div className="relative overflow-hidden border border-portfolio-primary/25 shadow-[0_0_60px_rgba(199,120,221,0.15)]">
+                    <motion.img
+                      src="/pic1.jpeg"
+                      alt="Gautham Praveen"
+                      className="h-full w-full object-cover"
+                      whileHover={{ scale: 1.04 }}
+                      transition={{ duration: 0.5 }}
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-portfolio-bg/80 via-transparent to-transparent" />
+                  </div>
                 </div>
-              </div>
-              <div className="absolute -right-4 top-4 hidden sm:block">
-                <DotsPattern cols={5} rows={5} gap={20} className="opacity-40" />
-              </div>
-              <div className="absolute -bottom-8 left-0 hidden sm:block">
-                <LogoOutline size={120} />
               </div>
             </motion.div>
           </div>
@@ -391,15 +405,28 @@ export default function Index() {
                       </li>
                     ))}
                   </ul>
-                  <a
-                    href={project.repo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-auto inline-flex w-fit items-center gap-2 border border-portfolio-primary px-4 py-2 font-mono text-xs font-semibold text-white transition hover:bg-portfolio-primary/15"
-                  >
-                    <Github className="h-3.5 w-3.5" />
-                    Repository
-                  </a>
+                  <div className="mt-auto flex flex-wrap gap-2">
+                    {project.live && (
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex w-fit items-center gap-2 border border-portfolio-primary bg-portfolio-primary/20 px-4 py-2 font-mono text-xs font-semibold text-white transition hover:bg-portfolio-primary/30"
+                      >
+                        <Globe className="h-3.5 w-3.5" />
+                        View Live
+                      </a>
+                    )}
+                    <a
+                      href={project.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-fit items-center gap-2 border border-portfolio-gray/40 px-4 py-2 font-mono text-xs font-semibold text-white transition hover:border-portfolio-primary hover:bg-portfolio-primary/10"
+                    >
+                      <Github className="h-3.5 w-3.5" />
+                      Repository
+                    </a>
+                  </div>
                 </div>
               </motion.article>
             ))}
@@ -442,12 +469,9 @@ export default function Index() {
             </div>
 
             <div className="relative flex justify-center lg:mt-0">
-              <div className="absolute left-6 top-0 hidden sm:block">
-                <DotsPattern cols={5} rows={5} gap={20} className="opacity-40" />
-              </div>
-              <div className="absolute bottom-8 right-4 hidden sm:block">
-                <DotsPattern cols={5} rows={4} gap={20} className="opacity-40" />
-              </div>
+              {/* Offset border frame behind image */}
+              <div className="absolute left-1/2 top-1/2 w-[82%] max-w-[26rem] -translate-x-[47%] -translate-y-[47%] border-2 border-portfolio-primary/20 aspect-[3/4]" />
+
               <motion.img
                 src="/pic-2.jpeg"
                 alt="Gautham Praveen"
@@ -535,7 +559,7 @@ export default function Index() {
                 transition={{ delay: i * 0.06, duration: 0.45 }}
                 className={cn(
                   "flex gap-5 border p-6 transition",
-                  "border-portfolio-gray/25 bg-[#2b3039]/30 hover:border-portfolio-primary/50 hover:bg-[#2b3039]/50"
+                  "border-portfolio-gray/25 bg-[#2b3039]/30 hover:border-portfolio-primary/50 hover:bg-[#2b3039]/50 hover:shadow-[0_0_24px_rgba(199,120,221,0.08)]"
                 )}
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center border border-portfolio-primary/40 bg-portfolio-primary/10 text-portfolio-primary">
@@ -574,7 +598,7 @@ export default function Index() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ delay: i * 0.05, duration: 0.4 }}
-                className="flex flex-col gap-2 border border-portfolio-gray/25 bg-[#2b3039]/30 px-5 py-4 transition hover:border-portfolio-primary/50 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-2 border border-portfolio-gray/25 bg-[#2b3039]/30 px-5 py-4 transition hover:border-portfolio-primary/50 hover:shadow-[0_0_20px_rgba(199,120,221,0.08)] sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="flex items-start gap-3">
                   <Award className="mt-0.5 h-5 w-5 shrink-0 text-portfolio-primary" strokeWidth={1.75} />
@@ -617,10 +641,14 @@ export default function Index() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {skillBlocks.map((block) => (
-              <div
+            {skillBlocks.map((block, i) => (
+              <motion.div
                 key={block.title}
-                className="border border-portfolio-gray/25 transition hover:border-portfolio-primary/50"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ delay: i * 0.08, duration: 0.45 }}
+                className="border border-portfolio-gray/25 bg-[#2b3039]/20 backdrop-blur-sm transition hover:border-portfolio-primary/50 hover:bg-[#2b3039]/40 hover:shadow-[0_0_24px_rgba(199,120,221,0.08)]"
               >
                 <div className="border-b border-portfolio-gray/25 px-3 py-2">
                   <h3 className="font-mono text-sm font-semibold text-white">{block.title}</h3>
@@ -632,7 +660,7 @@ export default function Index() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.section>
