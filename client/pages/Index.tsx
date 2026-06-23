@@ -128,6 +128,7 @@ const certifications: {
     title: "McKinsey Forward Learner's Program",
     issuer: "McKinsey & Company",
     date: "Jun 2026",
+    url: "https://www.credly.com/badges/b29f114e-34de-44df-9c56-3761531a8a0c/public_url",
   },
   {
     title: "GEN AI Using IBM WatsonX",
