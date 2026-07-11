@@ -4,6 +4,10 @@ import { Footer } from "@/components/Footer";
 import { ContactForm } from "@/components/ContactForm";
 import { IntroTransition } from "@/components/IntroTransition";
 import { RotatingTypewriter } from "@/components/RotatingTypewriter";
+import { ScrollReveal, ScrollRevealItem } from "@/components/ScrollReveal";
+import { TiltCard } from "@/components/TiltCard";
+import { MagneticButton } from "@/components/MagneticButton";
+import { SplitText } from "@/components/SplitText";
 import {
   Github,
   Linkedin,
@@ -28,12 +32,12 @@ const projects = [
     title: "Cortex AI — AI Agent Study Platform",
     period: "June 2026",
     summary:
-      "Self-directed study assistant built on agentic RAG — ingests PDFs, searches the web, and auto-schedules review sessions.",
+      "An intelligent study assistant leveraging agentic RAG to process documents, generate study materials, and automate schedule management.",
     tags: ["React", "FastAPI", "LangGraph", "Gemini", "Groq", "ChromaDB", "Cloudinary"],
     highlights: [
-      "Pipelines uploaded documents through ChromaDB while Tavily supplies fresh context from the open web.",
-      "Rotates between multiple Gemini API keys and Groq to stay under rate limits during long reasoning chains.",
-      "LangGraph orchestrates flashcard generation and drops optimised study blocks into Google Calendar; live on Vercel and Render.",
+      "Designed an Agentic RAG system utilizing session-based ChromaDB vector stores and a semantic judge for intelligent web search fallbacks via Tavily.",
+      "Developed a stateful backend with LangGraph to handle PDF processing from Cloudinary, creating contextual flashcards and revision notes.",
+      "Created a robust LLM routing mechanism using multiple keys to handle heavy reasoning tasks, and added Google Calendar integration with human oversight.",
     ],
     gradient: "bg-gradient-to-br from-indigo-700/90 via-portfolio-primary/80 to-violet-950/90",
     repo: "https://github.com/guth01/cortex-ai",
@@ -44,12 +48,12 @@ const projects = [
     title: "TaskForge — Gamified Task Management",
     period: "May 2026",
     summary:
-      "Gamified Kanban board where GenAI breaks down goals into subtasks and streak mechanics keep momentum high.",
+      "A Kanban-based productivity app that incorporates game mechanics, time management tools, and AI-driven insights.",
     tags: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "Redis", "Docker"],
     highlights: [
-      "Google Generative AI splits large tasks into manageable steps behind a fluid drag-and-drop board.",
-      "Express API backed by PostgreSQL persistence and Redis caching for snappy reads.",
-      "XP-style progress visuals and animated feedback loops; Dockerised and shipped on Railway.",
+      "Built a scalable backend with Node.js and PostgreSQL, implementing asynchronous cron jobs to manage gamification elements like quests and streaks.",
+      "Constructed a responsive React frontend with drag-and-drop capabilities, integrated Pomodoro tools, background audio, and secure Google login.",
+      "Incorporated Google Gemini to generate weekly progress reports, optimized performance with Redis, and containerized the application with Docker.",
     ],
     gradient: "bg-gradient-to-br from-emerald-700/90 via-teal-800/80 to-slate-900/90",
     repo: "https://github.com/guth01/TaskForge",
@@ -60,12 +64,12 @@ const projects = [
     title: "EventsOrg MCP — AI Event Management System",
     period: "March 2026",
     summary:
-      "MCP server toolkit that lets language models run live event operations through 20+ callable tools.",
+      "An open-source toolkit enabling Large Language Models to manage and coordinate live events through a comprehensive suite of tools.",
     tags: ["TypeScript", "Node.js", "SQLite", "MCP SDK", "Twilio"],
     highlights: [
-      "Runs over stdio for Claude Desktop or HTTP/SSE for remote clients — same tool surface either way.",
-      "Feeds the agent live Sheets data, walking directions, and weather alerts alongside Twilio SMS.",
-      "Handles volunteer swaps, vendor cancellations, and status sync without manual intervention.",
+      "Developed an MCP server providing over 20 functions for AI models to actively control event operations.",
+      "Supported flexible connectivity with both stdio for local desktop usage and HTTP/SSE for cloud-based client access.",
+      "Connected real-time data streams including Google Sheets, Maps for navigation, and OpenWeather to inform AI decision-making.",
     ],
     gradient: "bg-gradient-to-br from-amber-700/90 via-orange-900/80 to-slate-950/90",
     repo: "https://github.com/guth01/EventsOrg-MCP",
@@ -105,10 +109,11 @@ const experience = [
   {
     company: "Retailcloud",
     role: "Software Engineering Intern",
-    period: "Jun 2026 — Jul 2026",
+    period: "May 2026 — Jul 2026",
     highlights: [
-      "Rotated through Angular frontends, Spring Boot services, Kotlin Android apps, QA, and DevOps — shipping features and automation scripts with production-grade tooling.",
-      "Delivered apps spanning REST APIs with JWT auth, reactive forms, MVVM on mobile, Dockerised deployments, and Ansible playbooks.",
+      "Participated in a comprehensive engineering rotation, working with Angular, Java Spring Boot, and Kotlin to align with enterprise-level DevOps and product goals.",
+      "Built a prototype Restaurant POS system powered by microservices, utilizing Spring Boot, JWT for secure access, an API Gateway, and OpenFeign.",
+      "Implemented real-time features with WebSockets, event-driven messaging via RabbitMQ, integrated Razorpay for transactions, and deployed via Docker.",
     ],
   },
 ];
@@ -197,7 +202,7 @@ const skillBlocks = [
   {
     title: "AI / ML",
     items: [
-      "Exploratory Data Analysis",
+      "EDA",
       "Scikit-Learn",
       "Transformers",
       "Fine-tuning LLMs",
@@ -214,11 +219,14 @@ const skillBlocks = [
   { title: "Tools", items: ["Git", "GitHub", "Jupyter Notebook", "Conda", "Postman", "Docker"] },
 ];
 
-const fadeUp = {
-  initial: { opacity: 0, y: 28 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.55, ease: "easeOut" as const },
+// Section heading variant — slides up first
+const headingVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+  },
 };
 
 export default function Index() {
@@ -239,8 +247,8 @@ export default function Index() {
       <IntroTransition onComplete={onIntroComplete} />
       <Header introComplete={introDone} />
 
-      <main className="pb-32 pl-14 pr-4 pt-36 sm:pl-16 lg:ml-20 lg:pl-4 lg:pr-6">
-        {/* Hero */}
+      <main className="pb-32 px-4 pt-36 sm:pl-16 lg:ml-20 lg:pl-4 lg:pr-6">
+        {/* ── Hero ─────────────────────────────────────────────── */}
         <motion.section
           id="home"
           initial={{ opacity: 0, y: 24 }}
@@ -265,31 +273,43 @@ export default function Index() {
 
               <RotatingTypewriter />
 
-              <p className="max-w-2xl text-lg leading-relaxed text-portfolio-gray sm:text-xl">
-                Building smart, efficient, and scalable software. I love bridging the gap between complex algorithms
-                and elegant, real-world solutions, driven by a constant curiosity to learn, adapt, and build.
-              </p>
+              {/* Split-word animated subtitle */}
+              <SplitText
+                text="Building smart, efficient, and scalable software. I love bridging the gap between complex algorithms and elegant, real-world solutions, driven by a constant curiosity to learn, adapt, and build."
+                className="max-w-2xl text-lg leading-relaxed text-portfolio-gray sm:text-xl"
+                stagger={0.03}
+                delay={0.15}
+                trigger="mount"
+              />
 
               <div className="flex flex-wrap gap-4">
-                <a
-                  href="/Resume-Gautham.pdf"
-                  download="Gautham_Praveen_Resume.pdf"
-                  className="inline-flex items-center gap-2 border border-portfolio-gray/50 bg-[#2b3039]/50 px-5 py-3 font-mono text-sm font-medium text-white transition hover:border-portfolio-primary hover:text-portfolio-primary"
-                >
-                  Download résumé
-                </a>
-                <a
-                  href="#contacts"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth" });
-                    window.history.replaceState(null, "", "#contacts");
-                  }}
-                  className="group relative inline-flex items-center justify-center overflow-hidden border-2 border-portfolio-primary bg-portfolio-primary/15 px-6 py-3 font-mono text-sm font-semibold text-white shadow-[0_0_32px_rgba(199,120,221,0.2)] transition hover:bg-portfolio-primary/25"
-                >
-                  <span className="relative z-10">Let&apos;s build something</span>
-                  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition group-hover:translate-x-full duration-700" />
-                </a>
+                {/* Magnetic: Download résumé */}
+                <MagneticButton>
+                  <a
+                    href="/Resume-Gautham.pdf"
+                    download="Gautham_Praveen_Resume.pdf"
+                    className="inline-flex items-center gap-2 border border-portfolio-gray/50 bg-[#2b3039]/50 px-5 py-3 font-mono text-sm font-medium text-white transition hover:border-portfolio-primary hover:text-portfolio-primary"
+                  >
+                    Download résumé
+                  </a>
+                </MagneticButton>
+
+                {/* Magnetic: Let's build something */}
+                <MagneticButton>
+                  <a
+                    href="#contacts"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth" });
+                      window.history.replaceState(null, "", "#contacts");
+                    }}
+                    className="group relative inline-flex items-center justify-center overflow-hidden border-2 border-portfolio-primary bg-portfolio-primary/15 px-6 py-3 font-mono text-sm font-semibold text-white shadow-[0_0_32px_rgba(199,120,221,0.2)] transition hover:bg-portfolio-primary/25"
+                  >
+                    <span className="relative z-10">Let&apos;s build something</span>
+                    <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition group-hover:translate-x-full duration-700" />
+                  </a>
+                </MagneticButton>
+
                 <a
                   href="#projects"
                   onClick={(e) => {
@@ -345,396 +365,408 @@ export default function Index() {
           </div>
         </motion.section>
 
-        {/* Quote */}
+        {/* ── Quote ────────────────────────────────────────────── */}
         <motion.section
-          {...fadeUp}
-          transition={{ ...fadeUp.transition, delay: 0.05 }}
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.55, ease: "easeOut" }}
           className="mx-auto my-24 max-w-2xl px-2 lg:px-4"
         >
           <div className="border border-portfolio-primary/25 bg-gradient-to-br from-portfolio-primary/5 to-transparent p-8 shadow-[0_0_40px_rgba(199,120,221,0.08)]">
             <blockquote className="text-xl font-semibold leading-snug text-white sm:text-2xl">
-            "Move fast and break things. Unless you are breaking things, you are not moving fast enough."
+            &quot;Move fast and break things. Unless you are breaking things, you are not moving fast enough.&quot;
             </blockquote>
             <div className="mt-4 text-right text-sm text-portfolio-gray"> — Mark Zuckerberg</div>
           </div>
         </motion.section>
 
-        {/* Projects */}
-        <motion.section
+        {/* ── Projects ─────────────────────────────────────────── */}
+        <section
           id="projects"
-          {...fadeUp}
           className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
         >
-          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              <span className="text-portfolio-primary">#</span>
-              <span className="text-white">projects</span>
-            </h2>
-            <p className="max-w-md font-mono text-sm text-portfolio-gray">
-              AI agents, full-stack apps, desktop tools, and computer vision — a sample of what I ship.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {projects.map((project, i) => (
-              <motion.article
-                key={project.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ delay: i * 0.08, duration: 0.5, ease: "easeOut" }}
-                className="group flex flex-col overflow-hidden border border-portfolio-gray/25 bg-[#2b3039]/40 transition hover:border-portfolio-primary/60 hover:shadow-[0_12px_40px_rgba(199,120,221,0.12)]"
-              >
-                <div className={cn("relative min-h-[10rem] overflow-hidden p-6", project.gradient)}>
-                  <p className="font-mono text-xs uppercase tracking-widest text-white/75">{project.period}</p>
-                  <h3 className="mt-2 text-lg font-bold leading-snug text-white drop-shadow-md">{project.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-white/85">{project.summary}</p>
-                </div>
-                <div className="flex flex-wrap gap-2 border-b border-portfolio-gray/20 p-4">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="font-mono text-xs text-portfolio-gray">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex flex-1 flex-col gap-4 p-5">
-                  <ul className="list-inside list-disc space-y-2 text-sm text-portfolio-gray marker:text-portfolio-primary">
-                    {project.highlights.map((line, idx) => (
-                      <li key={idx} className="pl-1">
-                        {line}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-auto flex flex-wrap gap-2">
-                    {project.live && (
-                      <a
-                        href={project.live}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex w-fit items-center gap-2 border border-portfolio-primary bg-portfolio-primary/20 px-4 py-2 font-mono text-xs font-semibold text-white transition hover:bg-portfolio-primary/30"
-                      >
-                        <Globe className="h-3.5 w-3.5" />
-                        View Live
-                      </a>
-                    )}
-                    <a
-                      href={project.repo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex w-fit items-center gap-2 border border-portfolio-gray/40 px-4 py-2 font-mono text-xs font-semibold text-white transition hover:border-portfolio-primary hover:bg-portfolio-primary/10"
-                    >
-                      <Github className="h-3.5 w-3.5" />
-                      Repository
-                    </a>
-                  </div>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* About */}
-        <motion.section
-          id="about-me"
-          {...fadeUp}
-          className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
-        >
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              <span className="text-portfolio-primary">#</span>
-              <span className="text-white">about-me</span>
-            </h2>
-            <p className="mt-2 font-mono text-sm text-portfolio-gray">Background, mindset, and what I build for.</p>
-          </div>
-
-          <div className="grid grid-cols-1 items-start gap-14 lg:grid-cols-2">
-            <div className="space-y-6">
-              <p className="text-xl font-semibold text-white sm:text-2xl">Hello, I&apos;m Gautham.</p>
-              <p className="text-base leading-relaxed text-portfolio-gray sm:text-lg">
-                Originally from <span className="text-white">Calicut, Kerala</span>, I am a 3rd-year Computer Science
-                student at <span className="text-white">VIT Vellore</span> specializing in AI and Machine Learning.
-                While I pride myself on remaining consistent academically, my true focus is turning theoretical
-                concepts into robust, high-performance applications.
-              </p>
-              <p className="leading-relaxed text-portfolio-gray">
-                I thrive at the intersection of different technical fields, developing everything from real-time
-                computer vision pipelines and LLM-driven tools to the seamless full-stack web environments that support
-                them.
-              </p>
-              <p className="leading-relaxed text-portfolio-gray">
-                For me, it isn&apos;t just about writing code that functions—it is about engineering it beautifully.
-                By prioritizing streamlined data processing and clean architecture, my ultimate objective is to deliver
-                platforms that are highly optimized and future-proof.
-              </p>
-            </div>
-
-            <div className="relative flex justify-center lg:mt-0">
-              {/* Offset border frame behind image */}
-              <div className="absolute left-1/2 top-1/2 w-[82%] max-w-[26rem] -translate-x-[47%] -translate-y-[47%] border-2 border-portfolio-primary/20 aspect-[3/4]" />
-
-              <motion.img
-                src="/pic-2.jpeg"
-                alt="Gautham Praveen"
-                className="relative z-10 w-[85%] max-w-md border-b-2 border-portfolio-primary shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
-                whileHover={{ y: -6 }}
-                transition={{ type: "spring", stiffness: 260, damping: 22 }}
-              />
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Experience */}
-        <motion.section
-          id="experience"
-          {...fadeUp}
-          className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
-        >
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              <span className="text-portfolio-primary">#</span>
-              <span className="text-white">experience</span>
-            </h2>
-            <p className="mt-2 font-mono text-sm text-portfolio-gray">
-              Industry internships and hands-on engineering across the stack.
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {experience.map((item, i) => (
-              <motion.article
-                key={item.company}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-30px" }}
-                transition={{ delay: i * 0.06, duration: 0.45 }}
-                className="border border-portfolio-gray/25 bg-[#2b3039]/30 p-6 transition hover:border-portfolio-primary/50 hover:bg-[#2b3039]/50"
-              >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="flex gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center border border-portfolio-primary/40 bg-portfolio-primary/10 text-portfolio-primary">
-                      <Briefcase className="h-6 w-6" strokeWidth={1.75} />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">{item.company}</h3>
-                      <p className="mt-1 text-sm text-portfolio-primary">{item.role}</p>
-                    </div>
-                  </div>
-                  <p className="font-mono text-xs uppercase tracking-widest text-portfolio-gray sm:pt-1">{item.period}</p>
-                </div>
-                <ul className="mt-5 list-inside list-disc space-y-2 pl-16 text-sm leading-relaxed text-portfolio-gray marker:text-portfolio-primary">
-                  {item.highlights.map((line, idx) => (
-                    <li key={idx} className="pl-1">
-                      {line}
-                    </li>
-                  ))}
-                </ul>
-              </motion.article>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Extracurriculars */}
-        <motion.section
-          id="extracurriculars"
-          {...fadeUp}
-          className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
-        >
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              <span className="text-portfolio-primary">#</span>
-              <span className="text-white">extracurriculars</span>
-            </h2>
-            <p className="mt-2 font-mono text-sm text-portfolio-gray">
-              LeetCode, chapter leadership, academics, hackathons, and community work.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {extracurriculars.map((item, i) => (
+          <ScrollReveal stagger={0.08}>
+            <ScrollRevealItem>
               <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-30px" }}
-                transition={{ delay: i * 0.06, duration: 0.45 }}
-                className={cn(
-                  "flex gap-5 border p-6 transition",
-                  "border-portfolio-gray/25 bg-[#2b3039]/30 hover:border-portfolio-primary/50 hover:bg-[#2b3039]/50 hover:shadow-[0_0_24px_rgba(199,120,221,0.08)]"
-                )}
+                className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+                variants={headingVariants}
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center border border-portfolio-primary/40 bg-portfolio-primary/10 text-portfolio-primary">
-                  <item.icon className="h-6 w-6" strokeWidth={1.75} />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white">{item.title}</h3>
-                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-portfolio-gray">{item.detail}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Certifications */}
-        <motion.section
-          id="certifications"
-          {...fadeUp}
-          className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
-        >
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              <span className="text-portfolio-primary">#</span>
-              <span className="text-white">certifications</span>
-            </h2>
-            <p className="mt-2 font-mono text-sm text-portfolio-gray">
-              Cloud, consulting, generative AI, and machine learning credentials.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {certifications.map((cert, i) => (
-              <motion.div
-                key={cert.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-30px" }}
-                transition={{ delay: i * 0.05, duration: 0.4 }}
-                className="flex flex-col gap-2 border border-portfolio-gray/25 bg-[#2b3039]/30 px-5 py-4 transition hover:border-portfolio-primary/50 hover:shadow-[0_0_20px_rgba(199,120,221,0.08)] sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div className="flex items-start gap-3">
-                  <Award className="mt-0.5 h-5 w-5 shrink-0 text-portfolio-primary" strokeWidth={1.75} />
-                  <div>
-                    {cert.url ? (
-                      <a
-                        href={cert.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-1.5 font-semibold text-white transition hover:text-portfolio-primary"
-                      >
-                        {cert.title}
-                        <ExternalLink className="h-3.5 w-3.5 opacity-60 transition group-hover:opacity-100" />
-                      </a>
-                    ) : (
-                      <p className="font-semibold text-white">{cert.title}</p>
-                    )}
-                    <p className="mt-0.5 text-sm text-portfolio-gray">{cert.issuer}</p>
-                  </div>
-                </div>
-                <p className="pl-8 font-mono text-xs uppercase tracking-widest text-portfolio-gray sm:pl-0">
-                  {cert.date}
+                <h2 className="text-3xl font-bold sm:text-4xl">
+                  <span className="text-portfolio-primary">#</span>
+                  <span className="text-white">projects</span>
+                </h2>
+                <p className="max-w-md font-mono text-sm text-portfolio-gray">
+                  AI agents, full-stack apps, desktop tools, and computer vision — a sample of what I ship.
                 </p>
               </motion.div>
-            ))}
-          </div>
-        </motion.section>
+            </ScrollRevealItem>
 
-        {/* Skills */}
-        <motion.section
-          id="skills"
-          {...fadeUp}
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+              {projects.map((project) => (
+                <ScrollRevealItem key={project.id}>
+                  <TiltCard className="group relative flex h-full flex-col overflow-hidden border border-portfolio-gray/25 bg-[#2b3039]/40 transition hover:border-portfolio-primary/60 hover:shadow-[0_12px_40px_rgba(199,120,221,0.12)]">
+                    <div className={cn("relative min-h-[10rem] overflow-hidden p-6", project.gradient)}>
+                      <p className="font-mono text-xs uppercase tracking-widest text-white/75">{project.period}</p>
+                      <h3 className="mt-2 text-lg font-bold leading-snug text-white drop-shadow-md">{project.title}</h3>
+                      <p className="mt-3 text-sm leading-relaxed text-white/85">{project.summary}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 border-b border-portfolio-gray/20 p-4">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="font-mono text-xs text-portfolio-gray">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex flex-1 flex-col gap-4 p-5">
+                      <ul className="list-inside list-disc space-y-2 text-sm text-portfolio-gray marker:text-portfolio-primary">
+                        {project.highlights.map((line, idx) => (
+                          <li key={idx} className="pl-1">
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-auto flex flex-wrap gap-2">
+                        {project.live && (
+                          <a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex w-fit items-center gap-2 border border-portfolio-primary bg-portfolio-primary/20 px-4 py-2 font-mono text-xs font-semibold text-white transition hover:bg-portfolio-primary/30"
+                          >
+                            <Globe className="h-3.5 w-3.5" />
+                            View Live
+                          </a>
+                        )}
+                        <a
+                          href={project.repo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex w-fit items-center gap-2 border border-portfolio-gray/40 px-4 py-2 font-mono text-xs font-semibold text-white transition hover:border-portfolio-primary hover:bg-portfolio-primary/10"
+                        >
+                          <Github className="h-3.5 w-3.5" />
+                          Repository
+                        </a>
+                      </div>
+                    </div>
+                  </TiltCard>
+                </ScrollRevealItem>
+              ))}
+            </div>
+          </ScrollReveal>
+        </section>
+
+        {/* ── About ────────────────────────────────────────────── */}
+        <section
+          id="about-me"
           className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
         >
-          <div className="mb-10">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              <span className="text-portfolio-primary">#</span>
-              <span className="text-white">skills</span>
-            </h2>
-          </div>
+          <ScrollReveal stagger={0.1}>
+            <ScrollRevealItem>
+              <div className="mb-12">
+                <h2 className="text-3xl font-bold sm:text-4xl">
+                  <span className="text-portfolio-primary">#</span>
+                  <span className="text-white">about-me</span>
+                </h2>
+                <p className="mt-2 font-mono text-sm text-portfolio-gray">Background, mindset, and what I build for.</p>
+              </div>
+            </ScrollRevealItem>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {skillBlocks.map((block, i) => (
-              <motion.div
-                key={block.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-30px" }}
-                transition={{ delay: i * 0.08, duration: 0.45 }}
-                className="border border-portfolio-gray/25 bg-[#2b3039]/20 backdrop-blur-sm transition hover:border-portfolio-primary/50 hover:bg-[#2b3039]/40 hover:shadow-[0_0_24px_rgba(199,120,221,0.08)]"
-              >
-                <div className="border-b border-portfolio-gray/25 px-3 py-2">
-                  <h3 className="font-mono text-sm font-semibold text-white">{block.title}</h3>
+            <div className="grid grid-cols-1 items-start gap-14 lg:grid-cols-2">
+              <ScrollRevealItem>
+                <div className="space-y-6">
+                  <p className="text-xl font-semibold text-white sm:text-2xl">Hello, I&apos;m Gautham.</p>
+                  <p className="text-base leading-relaxed text-portfolio-gray sm:text-lg">
+                    Originally from <span className="text-white">Calicut, Kerala</span>, I am a 3rd-year Computer Science
+                    student at <span className="text-white">VIT Vellore</span> specializing in AI and Machine Learning.
+                    While I pride myself on remaining consistent academically, my true focus is turning theoretical
+                    concepts into robust, high-performance applications.
+                  </p>
+                  <p className="leading-relaxed text-portfolio-gray">
+                    I thrive at the intersection of different technical fields, developing everything from real-time
+                    computer vision pipelines and LLM-driven tools to the seamless full-stack web environments that support
+                    them.
+                  </p>
+                  <p className="leading-relaxed text-portfolio-gray">
+                    For me, it isn&apos;t just about writing code that functions—it is about engineering it beautifully.
+                    By prioritizing streamlined data processing and clean architecture, my ultimate objective is to deliver
+                    platforms that are highly optimized and future-proof.
+                  </p>
                 </div>
-                <div className="flex flex-wrap gap-2 px-3 py-4">
-                  {block.items.map((tag) => (
-                    <span key={tag} className="font-mono text-xs text-portfolio-gray">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
+              </ScrollRevealItem>
 
-        {/* Contacts */}
-        <motion.section
+              <ScrollRevealItem>
+                <div className="relative flex justify-center lg:mt-0">
+                  {/* Offset border frame behind image */}
+                  <div className="absolute left-1/2 top-1/2 w-[82%] max-w-[26rem] -translate-x-[47%] -translate-y-[47%] border-2 border-portfolio-primary/20 aspect-[3/4]" />
+
+                  <motion.img
+                    src="/pic-2.jpeg"
+                    alt="Gautham Praveen"
+                    className="relative z-10 w-[85%] max-w-md border-b-2 border-portfolio-primary shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+                    whileHover={{ y: -6 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                  />
+                </div>
+              </ScrollRevealItem>
+            </div>
+          </ScrollReveal>
+        </section>
+
+        {/* ── Experience ───────────────────────────────────────── */}
+        <section
+          id="experience"
+          className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
+        >
+          <ScrollReveal stagger={0.1}>
+            <ScrollRevealItem>
+              <div className="mb-12">
+                <h2 className="text-3xl font-bold sm:text-4xl">
+                  <span className="text-portfolio-primary">#</span>
+                  <span className="text-white">experience</span>
+                </h2>
+                <p className="mt-2 font-mono text-sm text-portfolio-gray">
+                  Industry internships and hands-on engineering across the stack.
+                </p>
+              </div>
+            </ScrollRevealItem>
+
+            <div className="space-y-6">
+              {experience.map((item) => (
+                <ScrollRevealItem key={item.company}>
+                  <article className="border border-portfolio-gray/25 bg-[#2b3039]/30 p-6 transition hover:border-portfolio-primary/50 hover:bg-[#2b3039]/50">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex gap-4">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center border border-portfolio-primary/40 bg-portfolio-primary/10 text-portfolio-primary">
+                          <Briefcase className="h-6 w-6" strokeWidth={1.75} />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-white">{item.company}</h3>
+                          <p className="mt-1 text-sm text-portfolio-primary">{item.role}</p>
+                        </div>
+                      </div>
+                      <p className="font-mono text-xs uppercase tracking-widest text-portfolio-gray sm:pt-1">{item.period}</p>
+                    </div>
+                    <ul className="mt-5 list-inside list-disc space-y-2 pl-16 text-sm leading-relaxed text-portfolio-gray marker:text-portfolio-primary">
+                      {item.highlights.map((line, idx) => (
+                        <li key={idx} className="pl-1">
+                          {line}
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                </ScrollRevealItem>
+              ))}
+            </div>
+          </ScrollReveal>
+        </section>
+
+        {/* ── Extracurriculars ─────────────────────────────────── */}
+        <section
+          id="extracurriculars"
+          className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
+        >
+          <ScrollReveal stagger={0.08}>
+            <ScrollRevealItem>
+              <div className="mb-12">
+                <h2 className="text-3xl font-bold sm:text-4xl">
+                  <span className="text-portfolio-primary">#</span>
+                  <span className="text-white">extracurriculars</span>
+                </h2>
+                <p className="mt-2 font-mono text-sm text-portfolio-gray">
+                  LeetCode, chapter leadership, academics, hackathons, and community work.
+                </p>
+              </div>
+            </ScrollRevealItem>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              {extracurriculars.map((item) => (
+                <ScrollRevealItem key={item.title}>
+                  <div
+                    className={cn(
+                      "flex gap-5 border p-6 transition",
+                      "border-portfolio-gray/25 bg-[#2b3039]/30 hover:border-portfolio-primary/50 hover:bg-[#2b3039]/50 hover:shadow-[0_0_24px_rgba(199,120,221,0.08)]"
+                    )}
+                  >
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center border border-portfolio-primary/40 bg-portfolio-primary/10 text-portfolio-primary">
+                      <item.icon className="h-6 w-6" strokeWidth={1.75} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-white">{item.title}</h3>
+                      <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-portfolio-gray">{item.detail}</p>
+                    </div>
+                  </div>
+                </ScrollRevealItem>
+              ))}
+            </div>
+          </ScrollReveal>
+        </section>
+
+        {/* ── Certifications ───────────────────────────────────── */}
+        <section
+          id="certifications"
+          className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
+        >
+          <ScrollReveal stagger={0.07}>
+            <ScrollRevealItem>
+              <div className="mb-12">
+                <h2 className="text-3xl font-bold sm:text-4xl">
+                  <span className="text-portfolio-primary">#</span>
+                  <span className="text-white">certifications</span>
+                </h2>
+                <p className="mt-2 font-mono text-sm text-portfolio-gray">
+                  Cloud, consulting, generative AI, and machine learning credentials.
+                </p>
+              </div>
+            </ScrollRevealItem>
+
+            <div className="space-y-3">
+              {certifications.map((cert) => (
+                <ScrollRevealItem key={cert.title}>
+                  <div className="flex flex-col gap-2 border border-portfolio-gray/25 bg-[#2b3039]/30 px-5 py-4 transition hover:border-portfolio-primary/50 hover:shadow-[0_0_20px_rgba(199,120,221,0.08)] sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-start gap-3">
+                      <Award className="mt-0.5 h-5 w-5 shrink-0 text-portfolio-primary" strokeWidth={1.75} />
+                      <div>
+                        {cert.url ? (
+                          <a
+                            href={cert.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group inline-flex items-center gap-1.5 font-semibold text-white transition hover:text-portfolio-primary"
+                          >
+                            {cert.title}
+                            <ExternalLink className="h-3.5 w-3.5 opacity-60 transition group-hover:opacity-100" />
+                          </a>
+                        ) : (
+                          <p className="font-semibold text-white">{cert.title}</p>
+                        )}
+                        <p className="mt-0.5 text-sm text-portfolio-gray">{cert.issuer}</p>
+                      </div>
+                    </div>
+                    <p className="pl-8 font-mono text-xs uppercase tracking-widest text-portfolio-gray sm:pl-0">
+                      {cert.date}
+                    </p>
+                  </div>
+                </ScrollRevealItem>
+              ))}
+            </div>
+          </ScrollReveal>
+        </section>
+
+        {/* ── Skills ───────────────────────────────────────────── */}
+        <section
+          id="skills"
+          className="relative mx-auto mb-28 max-w-6xl scroll-mt-28 px-2 lg:px-4"
+        >
+          <ScrollReveal stagger={0.1}>
+            <ScrollRevealItem>
+              <div className="mb-10">
+                <h2 className="text-3xl font-bold sm:text-4xl">
+                  <span className="text-portfolio-primary">#</span>
+                  <span className="text-white">skills</span>
+                </h2>
+              </div>
+            </ScrollRevealItem>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {skillBlocks.map((block) => (
+                <ScrollRevealItem key={block.title}>
+                  <div className="border border-portfolio-gray/25 bg-[#2b3039]/20 backdrop-blur-sm transition hover:border-portfolio-primary/50 hover:bg-[#2b3039]/40 hover:shadow-[0_0_24px_rgba(199,120,221,0.08)]">
+                    <div className="border-b border-portfolio-gray/25 px-3 py-2">
+                      <h3 className="font-mono text-sm font-semibold text-white">{block.title}</h3>
+                    </div>
+                    <div className="flex flex-wrap gap-2 px-3 py-4">
+                      {block.items.map((tag) => (
+                        <span key={tag} className="font-mono text-xs text-portfolio-gray">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </ScrollRevealItem>
+              ))}
+            </div>
+          </ScrollReveal>
+        </section>
+
+        {/* ── Contacts ─────────────────────────────────────────── */}
+        <section
           id="contacts"
-          {...fadeUp}
           className="relative mx-auto max-w-6xl scroll-mt-28 px-2 lg:px-4"
         >
-          <div className="mb-10">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              <span className="text-portfolio-primary">#</span>
-              <span className="text-white">contacts</span>
-            </h2>
-            <p className="mt-2 font-mono text-sm text-portfolio-gray">
-              Send a message — I read everything. Or reach me directly below.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-            <div className="space-y-6 lg:col-span-5">
-              <p className="leading-relaxed text-portfolio-gray">
-                Open to internships, collaborations, and interesting problems at the intersection of full-stack
-                engineering and AI/ML.
-              </p>
-              <div className="space-y-3">
-                <h3 className="font-semibold text-white">Direct</h3>
-                <ul className="space-y-2 font-mono text-sm">
-                  <li>
-                    <a
-                      href="mailto:gauthampraveen76@gmail.com"
-                      className="text-portfolio-gray transition hover:text-portfolio-primary"
-                    >
-                      gauthampraveen76@gmail.com
-                    </a>
-                  </li>
-                  <li>
-                    <a href="tel:+919400722621" className="text-portfolio-gray transition hover:text-portfolio-primary">
-                      +91 9400722621
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://github.com/guth01"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-portfolio-gray transition hover:text-portfolio-primary"
-                    >
-                      github.com/guth01
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://www.linkedin.com/in/gautham-praveen-63109328b/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-portfolio-gray transition hover:text-portfolio-primary"
-                    >
-                      LinkedIn profile
-                    </a>
-                  </li>
-                </ul>
+          <ScrollReveal stagger={0.1}>
+            <ScrollRevealItem>
+              <div className="mb-10">
+                <h2 className="text-3xl font-bold sm:text-4xl">
+                  <span className="text-portfolio-primary">#</span>
+                  <span className="text-white">contacts</span>
+                </h2>
+                <p className="mt-2 font-mono text-sm text-portfolio-gray">
+                  Send a message — I read everything. Or reach me directly below.
+                </p>
               </div>
-            </div>
+            </ScrollRevealItem>
 
-            <div className="border border-portfolio-gray/25 bg-[#2b3039]/25 p-6 lg:col-span-7">
-              <h3 className="mb-6 font-semibold text-white">Contact form</h3>
-              <ContactForm />
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+              <ScrollRevealItem className="lg:col-span-5">
+                <div className="space-y-6">
+                  <p className="leading-relaxed text-portfolio-gray">
+                    Open to internships, collaborations, and interesting problems at the intersection of full-stack
+                    engineering and AI/ML.
+                  </p>
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-white">Direct</h3>
+                    <ul className="space-y-2 font-mono text-sm">
+                      <li>
+                        <a
+                          href="mailto:gauthampraveen76@gmail.com"
+                          className="text-portfolio-gray transition hover:text-portfolio-primary"
+                        >
+                          gauthampraveen76@gmail.com
+                        </a>
+                      </li>
+                      <li>
+                        <a href="tel:+919400722621" className="text-portfolio-gray transition hover:text-portfolio-primary">
+                          +91 9400722621
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://github.com/guth01"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-portfolio-gray transition hover:text-portfolio-primary"
+                        >
+                          github.com/guth01
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://www.linkedin.com/in/gautham-praveen-63109328b/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-portfolio-gray transition hover:text-portfolio-primary"
+                        >
+                          LinkedIn profile
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </ScrollRevealItem>
+
+              <ScrollRevealItem className="lg:col-span-7">
+                <div className="border border-portfolio-gray/25 bg-[#2b3039]/25 p-6">
+                  <h3 className="mb-6 font-semibold text-white">Contact form</h3>
+                  <ContactForm />
+                </div>
+              </ScrollRevealItem>
             </div>
-          </div>
-        </motion.section>
+          </ScrollReveal>
+        </section>
       </main>
 
+      {/* Fixed social sidebar */}
       <div className="fixed left-0 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-8 pl-2 sm:flex">
         <div className="h-40 w-px bg-gradient-to-b from-transparent via-portfolio-primary/40 to-transparent" />
         <div className="flex flex-col items-center gap-6">
