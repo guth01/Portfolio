@@ -8,6 +8,7 @@ import { ScrollReveal, ScrollRevealItem } from "@/components/ScrollReveal";
 import { TiltCard } from "@/components/TiltCard";
 import { MagneticButton } from "@/components/MagneticButton";
 import { SplitText } from "@/components/SplitText";
+import { SkillTree } from "@/components/SkillTree";
 import {
   Github,
   Linkedin,
@@ -365,21 +366,6 @@ export default function Index() {
           </div>
         </motion.section>
 
-        {/* ── Quote ────────────────────────────────────────────── */}
-        <motion.section
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-          className="mx-auto my-24 max-w-2xl px-2 lg:px-4"
-        >
-          <div className="border border-portfolio-primary/25 bg-gradient-to-br from-portfolio-primary/5 to-transparent p-8 shadow-[0_0_40px_rgba(199,120,221,0.08)]">
-            <blockquote className="text-xl font-semibold leading-snug text-white sm:text-2xl">
-            &quot;Move fast and break things. Unless you are breaking things, you are not moving fast enough.&quot;
-            </blockquote>
-            <div className="mt-4 text-right text-sm text-portfolio-gray"> — Mark Zuckerberg</div>
-          </div>
-        </motion.section>
 
         {/* ── Projects ─────────────────────────────────────────── */}
         <section
@@ -668,24 +654,9 @@ export default function Index() {
               </div>
             </ScrollRevealItem>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {skillBlocks.map((block) => (
-                <ScrollRevealItem key={block.title}>
-                  <div className="border border-portfolio-gray/25 bg-[#2b3039]/20 backdrop-blur-sm transition hover:border-portfolio-primary/50 hover:bg-[#2b3039]/40 hover:shadow-[0_0_24px_rgba(199,120,221,0.08)]">
-                    <div className="border-b border-portfolio-gray/25 px-3 py-2">
-                      <h3 className="font-mono text-sm font-semibold text-white">{block.title}</h3>
-                    </div>
-                    <div className="flex flex-wrap gap-2 px-3 py-4">
-                      {block.items.map((tag) => (
-                        <span key={tag} className="font-mono text-xs text-portfolio-gray">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </ScrollRevealItem>
-              ))}
-            </div>
+            <ScrollRevealItem>
+              <SkillTree blocks={skillBlocks} />
+            </ScrollRevealItem>
           </ScrollReveal>
         </section>
 
