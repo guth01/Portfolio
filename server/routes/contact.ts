@@ -41,27 +41,36 @@ export const handleContactPost: RequestHandler = async (req, res) => {
   const safePhone = escapeHtml(phone ?? "—");
   const safeMessage = escapeHtml(message).replace(/\n/g, "<br>");
 
-  const { error } = await resend.emails.send({
-    from,
-    to,
-    replyTo: email,
-    subject: `Portfolio message from ${name}`,
-    text: [`Name: ${name}`, `Email: ${email}`, `Phone: ${phone || "—"}`, "", message].join("\n"),
-    html: `
-      <h2>New portfolio contact</h2>
-      <p><strong>Name:</strong> ${safeName}</p>
-      <p><strong>Email:</strong> ${safeEmail}</p>
-      <p><strong>Phone:</strong> ${safePhone}</p>
-      <p><strong>Message:</strong></p>
-      <p>${safeMessage}</p>
-    `,
-  });
+  try {
+    const { error } = await resend.emails.send({
+      from,
+      to,
+      replyTo: email,
+      subject: `Portfolio message from ${name}`,
+      text: [`Name: ${name}`, `Email: ${email}`, `Phone: ${phone || "—"}`, "", message].join("\n"),
+      html: `
+        <h2>New portfolio contact</h2>
+        <p><strong>Name:</strong> ${safeName}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
+        <p><strong>Phone:</strong> ${safePhone}</p>
+        <p><strong>Message:</strong></p>
+        <p>${safeMessage}</p>
+      `,
+    });
 
-  if (error) {
-    console.error("[contact] Resend error:", error);
+    if (error) {
+      console.error("[contact] Resend API error:", error);
+      const body: ContactResponse = {
+        ok: false,
+        error: "Could not send message. Try again or email me directly.",
+      };
+      return res.status(500).json(body);
+    }
+  } catch (err) {
+    console.error("[contact] Resend exception:", err);
     const body: ContactResponse = {
       ok: false,
-      error: "Could not send message. Try again or email me directly.",
+      error: "Server error while sending message. Please try again later.",
     };
     return res.status(500).json(body);
   }

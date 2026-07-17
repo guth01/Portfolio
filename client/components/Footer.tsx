@@ -58,7 +58,7 @@ export function Footer() {
             <div className="h-px w-full bg-gradient-to-r from-transparent via-portfolio-gray/40 to-transparent" />
 
             <div className="text-center text-xs text-portfolio-gray">
-              © {new Date().getFullYear()} Gautham. Crafted with curiosity.
+              Crafted with curiosity.
             </div>
           </div>
         </div>
