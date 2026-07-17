@@ -1,5 +1,9 @@
+import type { IncomingMessage, ServerResponse } from "node:http";
 import { createServer } from "../server";
 
 const app = createServer();
 
-export default app;
+// Vercel serverless handler — must export a (req, res) function
+export default function handler(req: IncomingMessage, res: ServerResponse) {
+  return app(req, res);
+}

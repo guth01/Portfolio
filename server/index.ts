@@ -1,4 +1,5 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config(); // no-op if .env is missing (e.g. Vercel injects env vars directly)
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
