@@ -142,13 +142,7 @@ export function IntroTransition({ onComplete }: IntroTransitionProps) {
               />
             </motion.button>
 
-            <button
-              type="button"
-              onClick={finish}
-              className="font-mono text-xs text-portfolio-gray underline-offset-4 hover:text-white hover:underline"
-            >
-              Skip intro
-            </button>
+
           </motion.div>
 
           <motion.div
